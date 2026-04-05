@@ -72,12 +72,14 @@ $$
 - $x^a(t) \cdot (x^{\ast})^b(t)$ 的 spectrum 是 $a$ 個 $X(f)$ 跟 $b$ 個 $X^{\ast}(-f)$ 的 $(a+b)$-fold 捲積
 - 捲積支撐相加：**bandwidth $= (a+b) \cdot B$**
 
-**Odd $k$**：$a = \tfrac{k+1}{2}$, $b = \tfrac{k-1}{2}$, $a+b = k$
+**Odd $k$**： $a = \tfrac{k+1}{2}$, $b = \tfrac{k-1}{2}$, $a+b = k$
+
 $$
 \boxed{\text{BW}(y_k) \;=\; k \cdot \text{BW}, \qquad \text{支撐嚴格在 } \left[-\tfrac{k \cdot \text{BW}}{2},\, +\tfrac{k \cdot \text{BW}}{2}\right]}
 $$
 
 **Even $k$**：含 $|x|$ 這個 sqrt，無法寫成有限項多項式
+
 $$
 \boxed{\text{BW}(y_k) \;=\; \infty \text{ (long tail)}, \qquad \text{但能量集中在 } \sim k \cdot \text{BW} \text{ 附近}}
 $$
@@ -108,10 +110,10 @@ $$
 
 看 **ACLR2** 那一欄：
 
-- **$k = 1$**：$-\infty$ ← 訊號只有 $\pm 10$ MHz，ACLR2 band (30~50 MHz) 完全在外
-- **$k = 3$**：$-\infty$ ← $y_3 = x \cdot |x|^2 = x^2 \cdot x^{\ast}$ 是**純多項式**，bandwidth 嚴格 $= 60$ MHz，超出 $\pm 30$ MHz 之後 **exact zero** → ACLR2 band 真的什麼都沒有
-- **$k = 2$**：$-37$ dBc (**非零！**) ← $y_2 = x \cdot |x|$ 含 sqrt，有 long tail，在 30~50 MHz 還有 $-37$ dB 的能量洩漏
-- **$k = 4$**：$-32$ dBc (非零)
+- **$k = 1$**： $-\infty$ ← 訊號只有 $\pm 10$ MHz，ACLR2 band (30~50 MHz) 完全在外
+- **$k = 3$**： $-\infty$ ← $y_3 = x \cdot |x|^2 = x^2 \cdot x^{\ast}$ 是**純多項式**，bandwidth 嚴格 $= 60$ MHz，超出 $\pm 30$ MHz 之後 **exact zero** → ACLR2 band 真的什麼都沒有
+- **$k = 2$**： $-37$ dBc (**非零！**) ← $y_2 = x \cdot |x|$ 含 sqrt，有 long tail，在 30~50 MHz 還有 $-37$ dB 的能量洩漏
+- **$k = 4$**： $-32$ dBc (非零)
 - **$k = 6, 8$**：都有明顯的 ACLR2 能量
 
 這完全印證 §3 的數學推導：**odd order basis 有 hard bandwidth limit，even order basis 有 infinite tail**。
