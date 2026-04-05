@@ -4,7 +4,7 @@
 
 MATLAB simulation + 完整數學推導 + RF vs baseband 雙觀點解釋。
 
-## TL;DR
+## 摘要
 
 PA 模型：
 
