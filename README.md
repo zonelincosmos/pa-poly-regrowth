@@ -86,7 +86,3 @@ Script 會：
 ## 延伸閱讀 / Keywords
 
 Memoryless polynomial PA model, spectral regrowth, AM/AM AM/PM, ACLR, digital predistortion (DPD), memory polynomial, Generalized Memory Polynomial (GMP), Volterra series, bias memory effect, thermal memory, harmonic termination, Class-F PA
-
-## License
-
-MIT
