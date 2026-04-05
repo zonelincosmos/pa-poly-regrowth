@@ -8,9 +8,9 @@ MATLAB simulation + 完整數學推導 + RF vs baseband 雙觀點解釋。
 
 PA 模型：
 
-$$
+```math
 y = \sum_{k=1}^{K} a_k \cdot x \cdot \lvert x \rvert^{k-1}
-$$
+```
 
 關鍵發現：
 
