@@ -32,7 +32,7 @@ $$
 y(n) \;=\; \sum_{k=1}^{K} a_k \cdot x(n) \cdot |x(n)|^{k-1}
 $$
 
-其中 $x(n)$ 是 complex baseband input，$|x(n)| = \sqrt{x(n)\,x^*(n)}$ 是 envelope magnitude。
+其中 $x(n)$ 是 complex baseband input，$|x(n)| = \sqrt{x(n)\,x^{\ast}(n)}$ 是 envelope magnitude。
 
 **這次分析取 $a_k = 1$**，專注在每一項 basis function 的「形狀」與「位置」，不 fit 特定 PA。
 
@@ -51,25 +51,25 @@ $$
 **Odd $k$** ($k = 1, 3, 5, \ldots$)：
 
 $$
-y_k = x \cdot |x|^{k-1} = x \cdot (x\,x^*)^{\frac{k-1}{2}} = x^{\frac{k+1}{2}} \cdot (x^*)^{\frac{k-1}{2}}
+y_k = x \cdot |x|^{k-1} = x \cdot (x\,x^{\ast})^{\frac{k-1}{2}} = x^{\frac{k+1}{2}} \cdot (x^{\ast})^{\frac{k-1}{2}}
 $$
 
-這是 $x$ 和 $x^*$ 的**純多項式** (polynomial)，joint degree $= k$。
+這是 $x$ 和 $x^{\ast}$ 的**純多項式** (polynomial)，joint degree $= k$。
 
 **Even $k$** ($k = 2, 4, 6, \ldots$)：
 
 $$
-y_k = x \cdot |x|^{k-1} = x \cdot |x| \cdot (x\,x^*)^{\frac{k-2}{2}}
+y_k = x \cdot |x|^{k-1} = x \cdot |x| \cdot (x\,x^{\ast})^{\frac{k-2}{2}}
 $$
 
-含 $|x| = \sqrt{x\,x^*}$，這是一個**非多項式** (non-polynomial, has a square root)。
+含 $|x| = \sqrt{x\,x^{\ast}}$，這是一個**非多項式** (non-polynomial, has a square root)。
 
 ### 3.2 Bandwidth 推導
 
 若 $x(t)$ 的 spectrum 支撐在 $[-\tfrac{B}{2}, \tfrac{B}{2}]$ ($B = \text{BW}$)，則：
 
 - 時域乘法 $\longleftrightarrow$ 頻域捲積
-- $x^a(t) \cdot (x^*)^b(t)$ 的 spectrum 是 $a$ 個 $X(f)$ 跟 $b$ 個 $X^*(-f)$ 的 $(a+b)$-fold 捲積
+- $x^a(t) \cdot (x^{\ast})^b(t)$ 的 spectrum 是 $a$ 個 $X(f)$ 跟 $b$ 個 $X^{\ast}(-f)$ 的 $(a+b)$-fold 捲積
 - 捲積支撐相加：**bandwidth $= (a+b) \cdot B$**
 
 **Odd $k$**：$a = \tfrac{k+1}{2}$, $b = \tfrac{k-1}{2}$, $a+b = k$
@@ -109,7 +109,7 @@ $$
 看 **ACLR2** 那一欄：
 
 - **$k = 1$**：$-\infty$ ← 訊號只有 $\pm 10$ MHz，ACLR2 band (30~50 MHz) 完全在外
-- **$k = 3$**：$-\infty$ ← $y_3 = x \cdot |x|^2 = x^2 \cdot x^*$ 是**純多項式**，bandwidth 嚴格 $= 60$ MHz，超出 $\pm 30$ MHz 之後 **exact zero** → ACLR2 band 真的什麼都沒有
+- **$k = 3$**：$-\infty$ ← $y_3 = x \cdot |x|^2 = x^2 \cdot x^{\ast}$ 是**純多項式**，bandwidth 嚴格 $= 60$ MHz，超出 $\pm 30$ MHz 之後 **exact zero** → ACLR2 band 真的什麼都沒有
 - **$k = 2$**：$-37$ dBc (**非零！**) ← $y_2 = x \cdot |x|$ 含 sqrt，有 long tail，在 30~50 MHz 還有 $-37$ dB 的能量洩漏
 - **$k = 4$**：$-32$ dBc (非零)
 - **$k = 6, 8$**：都有明顯的 ACLR2 能量
@@ -131,7 +131,7 @@ $$
 實體 PA 吃的是 **real passband signal**：
 
 $$
-x_\text{RF}(t) \;=\; \mathrm{Re}\!\left\{ x(t)\,e^{j\omega_c t} \right\} \;=\; \tfrac{1}{2}\!\left( x(t)\, e^{j\omega_c t} + x^*(t)\, e^{-j\omega_c t} \right)
+x_\text{RF}(t) \;=\; \mathrm{Re}\!\left\{ x(t)\,e^{j\omega_c t} \right\} \;=\; \tfrac{1}{2}\!\left( x(t)\, e^{j\omega_c t} + x^{\ast}(t)\, e^{-j\omega_c t} \right)
 $$
 
 PA 是 real polynomial：
@@ -145,7 +145,7 @@ $$
 對每個 $k$ 用 binomial theorem：
 
 $$
-x_\text{RF}(t)^k \;=\; \frac{1}{2^k} \sum_{m=0}^{k} \binom{k}{m}\, x^m (x^*)^{k-m}\, e^{\,j(2m-k)\,\omega_c t}
+x_\text{RF}(t)^k \;=\; \frac{1}{2^k} \sum_{m=0}^{k} \binom{k}{m}\, x^m (x^{\ast})^{k-m}\, e^{\,j(2m-k)\,\omega_c t}
 $$
 
 每一項的 carrier frequency 是 $(2m - k)\,\omega_c$，$m = 0, 1, \ldots, k$。
@@ -177,7 +177,7 @@ $$
 **$k = 2$**（Even）：
 
 $$
-x_\text{RF}^2 \;=\; \tfrac{1}{4}\Big( x^2 e^{j 2\omega_c t} \;+\; 2|x|^2 \;+\; (x^*)^2 e^{-j 2\omega_c t} \Big)
+x_\text{RF}^2 \;=\; \tfrac{1}{4}\Big( x^2 e^{j 2\omega_c t} \;+\; 2|x|^2 \;+\; (x^{\ast})^2 e^{-j 2\omega_c t} \Big)
 $$
 
 成分在 $\{0, \pm 2\omega_c\}$，**$\omega_c$ 附近完全沒東西**。
@@ -186,7 +186,7 @@ DC 項 $\tfrac{1}{2}|x|^2$ 是 envelope squared，是個 **baseband 低頻訊號
 **$k = 3$**（Odd）：
 
 $$
-x_\text{RF}^3 \;=\; \tfrac{1}{8}\Big( x^3 e^{j 3\omega_c t} \;+\; 3|x|^2 x\, e^{j\omega_c t} \;+\; 3|x|^2 x^*\, e^{-j\omega_c t} \;+\; (x^*)^3 e^{-j 3\omega_c t} \Big)
+x_\text{RF}^3 \;=\; \tfrac{1}{8}\Big( x^3 e^{j 3\omega_c t} \;+\; 3|x|^2 x\, e^{j\omega_c t} \;+\; 3|x|^2 x^{\ast}\, e^{-j\omega_c t} \;+\; (x^{\ast})^3 e^{-j 3\omega_c t} \Big)
 $$
 
 在 $\omega_c$ 這邊的 term 是 $3|x|^2 x$。**這就是為什麼 baseband model 裡 $k=3$ 的 basis 是 $x \cdot |x|^2$** — 它來自 $x_\text{RF}^3$ 的 $e^{j\omega_c t}$ component。
@@ -311,7 +311,7 @@ $$
 
 ### 9.3 一句話總結
 
-> **Odd order basis 是 $x, x^*$ 的純多項式，有 exact $k \cdot \text{BW}$ bandwidth；Even order basis 含 $\sqrt{x x^*}$ 是 non-polynomial，有 infinite tail。實體 RF PA 的 bandpass 路徑把 even order 從 fundamental band 清乾淨，所以 DPD 只需要 odd basis；even order 的影響改走 memory effect 那條路，由 memory polynomial 的 delay terms 負責捕捉。**
+> **Odd order basis 是 $x, x^{\ast}$ 的純多項式，有 exact $k \cdot \text{BW}$ bandwidth；Even order basis 含 $\sqrt{x x^{\ast}}$ 是 non-polynomial，有 infinite tail。實體 RF PA 的 bandpass 路徑把 even order 從 fundamental band 清乾淨，所以 DPD 只需要 odd basis；even order 的影響改走 memory effect 那條路，由 memory polynomial 的 delay terms 負責捕捉。**
 
 ---
 
@@ -338,7 +338,7 @@ $$
 | BPF | Bandpass Filter |
 | $f_c$, $\omega_c$ | Carrier frequency (linear / angular) |
 | $x(t)$ | Complex baseband signal |
-| $x^*$ | Complex conjugate of $x$ |
-| $\lvert x \rvert$ | Magnitude (envelope) of $x$, $= \sqrt{x\,x^*}$ |
+| $x^{\ast}$ | Complex conjugate of $x$ |
+| $\lvert x \rvert$ | Magnitude (envelope) of $x$, $= \sqrt{x\,x^{\ast}}$ |
 | $y_k$ | $k$-th order basis: $y_k = x \cdot \lvert x \rvert^{k-1}$ |
 | GMP | Generalized Memory Polynomial |

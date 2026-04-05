@@ -14,8 +14,8 @@ $$
 
 關鍵發現：
 
-1. **Odd $k$** 的 basis $y_k = x \cdot \lvert x \rvert^{k-1} = x^{(k+1)/2} (x^*)^{(k-1)/2}$ 是 $x, x^*$ 的**純多項式**，bandwidth **嚴格** $= k \cdot \text{BW}$，超出範圍 exact zero。
-2. **Even $k$** 的 basis 含 $\lvert x \rvert = \sqrt{x x^*}$ 是**非多項式**，spectrum 有 **infinite tail**，洩漏到 ACLR band。
+1. **Odd $k$** 的 basis $y_k = x \cdot \lvert x \rvert^{k-1} = x^{(k+1)/2} (x^{\ast})^{(k-1)/2}$ 是 $x, x^{\ast}$ 的**純多項式**，bandwidth **嚴格** $= k \cdot \text{BW}$，超出範圍 exact zero。
+2. **Even $k$** 的 basis 含 $\lvert x \rvert = \sqrt{x x^{\ast}}$ 是**非多項式**，spectrum 有 **infinite tail**，洩漏到 ACLR band。
 3. **「實體 PA 濾掉 even order」在 RF passband 層次是對的**，但濾掉他的不是晶體管本身，是 PA 輸出端到天線的 bandpass 路徑 (matching network + TX filter + antenna)。
 4. Even order **不是沒影響** — 它透過 envelope/bias memory、thermal memory、harmonic reflection 三條間接路徑影響 in-band，這就是為什麼 DPD 要用 memory polynomial / GMP 而不是加 even basis。
 
