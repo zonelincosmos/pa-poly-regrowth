@@ -193,7 +193,93 @@ x_\text{RF}^3 \;=\; \tfrac{1}{8}\Big( x^3 e^{j 3\omega_c t} \;+\; 3|x|^2 x\, e^{
 
 在 $\omega_c$ 這邊的 term 是 $3|x|^2 x$。**這就是為什麼 baseband model 裡 $k=3$ 的 basis 是 $x \cdot |x|^2$** — 它來自 $x_\text{RF}^3$ 的 $e^{j\omega_c t}$ component。
 
-### 5.5 RF 圖像
+### 5.5 Baseband Equivalent 為什麼「結構性」只有 Odd Order
+
+這一節回答一個核心問題：**實體 PA 的 transistor 非線性同時存在 odd 跟 even 項 ($a_2, a_4, a_6, \ldots$ 都不為零)，為什麼 baseband polynomial model 卻只寫 odd 項？**
+
+#### 事實一：實體 PA 的 real polynomial 一定同時有 odd + even
+
+Transistor 的 I-V 曲線是 real nonlinear function，它的 Taylor 展開沒理由挑 odd 或 even。所以**完整的 RF polynomial 是**：
+
+```math
+y_{\mathrm{RF}}(t) = \sum_{k=1}^{K} a_k \cdot x_{\mathrm{RF}}(t)^k
+```
+
+其中 $a_1, a_2, a_3, a_4, \ldots$ 的係數**全部都存在**。二次 transconductance $g_{m2}$、四次 $g_{m4}$ 在 class-AB / Doherty / GaN PA 裡通常都非零。這對所有實體 PA 都成立。
+
+#### 事實二：Baseband Equivalent 的定義
+
+「Baseband equivalent 模型」的數學定義是把 PA 輸出**經過 bandpass filter 之後**的 real signal，反解成 complex envelope：
+
+```math
+y_{\mathrm{RF}}^{\text{BPF}}(t) = \mathrm{Re}\lbrace y_{bb}(t) \cdot e^{j\omega_c t} \rbrace
+```
+
+關鍵字是 **BPF**：只有落在 fundamental band ($\pm\omega_c$ 附近) 的 RF 成分，才會進入 $y_{bb}$。DC、 $2\omega_c$、 $3\omega_c$、 $4\omega_c$、… 的成分全都被擋掉，對 $y_{bb}$ 貢獻為零。
+
+#### 事實三：用 binomial 展開算每個 $k$ 的 baseband 貢獻
+
+用 §5.2 的 binomial 公式展開 $x_{\mathrm{RF}}^k$，第 $k$ 項有 $k+1$ 個頻譜 bucket，分別落在 $(2m - k)\omega_c$， $m = 0, 1, \ldots, k$。
+
+**只有當 $2m - k = \pm 1$ 時，該 bucket 才落在 fundamental band 通得過 bandpass**。這要求：
+
+- $k$ 必須是**奇數** (因為 $2m - k = \pm 1 \Rightarrow k = 2m \mp 1$)
+- 存活下來的 $m$ 是 $(k+1)/2$ 跟 $(k-1)/2$
+
+對 **even $k$**： $(2m - k)$ 永遠是偶數，根本不可能等於 $\pm 1$ — **沒有任何一個 bucket 落在 fundamental band**。
+
+把每個 $k$ 的 baseband 貢獻算出來，整理成 table：
+
+| $k$ | 實體係數 | $x_{\mathrm{RF}}^k$ 有 $\pm\omega_c$ 成分嗎？ | 經 bandpass 後的 baseband 貢獻 |
+|:---:|:---:|:---:|:---|
+| 1 | $a_1$ | ✓ ($m = 0, 1$) | $a_1 \cdot x_{bb}$ |
+| **2** | $a_2$ | ✗ (只有 $0, \pm 2\omega_c$) | **$0$** |
+| 3 | $a_3$ | ✓ ($m = 1, 2$) | $\tfrac{3}{4} a_3 \cdot x_{bb} \lvert x_{bb} \rvert^2$ |
+| **4** | $a_4$ | ✗ (只有 $0, \pm 2\omega_c, \pm 4\omega_c$) | **$0$** |
+| 5 | $a_5$ | ✓ ($m = 2, 3$) | $\tfrac{5}{8} a_5 \cdot x_{bb} \lvert x_{bb} \rvert^4$ |
+| **6** | $a_6$ | ✗ | **$0$** |
+| 7 | $a_7$ | ✓ ($m = 3, 4$) | $\tfrac{35}{64} a_7 \cdot x_{bb} \lvert x_{bb} \rvert^6$ |
+| **8** | $a_8$ | ✗ | **$0$** |
+| 9 | $a_9$ | ✓ ($m = 4, 5$) | $\tfrac{63}{128} a_9 \cdot x_{bb} \lvert x_{bb} \rvert^8$ |
+
+對 odd $k$ 的**一般公式** (baseband coefficient $b_k$ 跟實體 RF coefficient $a_k$ 的關係)：
+
+```math
+b_k \;=\; \frac{1}{2^{k-1}} \binom{k}{\frac{k-1}{2}} \cdot a_k , \qquad k = 1, 3, 5, 7, \ldots
+```
+
+#### 事實四：完整的 Baseband Equivalent Model
+
+把所有 odd $k$ 的 baseband 貢獻加起來：
+
+```math
+y_{bb}(t) \;=\; \sum_{k = 1, 3, 5, 7, \ldots}^{K} b_k \cdot x_{bb}(t) \cdot \lvert x_{bb}(t) \rvert^{k-1}
+```
+
+**重點在這裡**：這個式子**沒有 $k = 2, 4, 6, 8$ 項**，不是因為我們「決定」只寫 odd，而是：
+
+1. 實體 RF polynomial $\sum_{k=1}^{K} a_k x_{\mathrm{RF}}^k$ 同時有 odd 跟 even 項
+2. 經過 RF → bandpass → baseband 轉換這個**純數學運算**之後
+3. Even $k$ 的貢獻**結構性地等於零**，跟 $a_2, a_4$ 的大小完全無關
+
+換句話說：就算你把實體 $a_2$ 調到無限大，baseband equivalent 的 $k=2$ 項仍然是 $0$。這是 binomial expansion + bandpass filtering 帶來的**數學結果**，不是近似、不是慣例。
+
+#### 對 §4 baseband simulation 的補充解釋
+
+回頭看 §4 我們的 simulation — 我們在 baseband 直接塞 $y_k = x \cdot |x|^{k-1}$ for $k = 2, 4, 6, 8$，然後量到非零的 ACLR 數字。那些數字**對應不到任何實體 PA 的物理行為**，原因：
+
+1. 那些 even-$k$ basis $x \cdot |x|^{k-1}$ 含 $|x|^{\text{odd}} = \sqrt{x x^{\ast}}^{\text{odd}}$ 這個**非多項式** (sqrt) 因子
+2. 實體 $a_2, a_4, \ldots$ 經過 §5 的推導，對應到的 baseband basis **根本不存在** (係數 $= 0$)
+3. 所以 $x \cdot |x|$、 $x \cdot |x|^3$ 這種 basis function **無法從任何實體 RF polynomial 推導出來**
+4. 把它們加到 DPD model 裡 = 在 basis set 裡加入一個 physical dimension 不存在的 degree of freedom → 只會擬合 measurement noise
+
+這就是為什麼學術文獻跟工業界的 DPD polynomial basis (memoryless polynomial / memory polynomial / GMP / Volterra) **一律只用 odd orders**。不是慣例，是**結構性的數學必然**。
+
+#### 一句話總結
+
+> **實體 PA 的 real polynomial 有 odd + even 項是物理事實；baseband equivalent model 只有 odd 項是把 "real polynomial + bandpass filter" 這兩件事組合起來的數學推導結果。Even 項沒消失，只是移到 DC 跟 $2\omega_c, 4\omega_c, \ldots$ 這些 baseband equivalent「看不到」的地方。**
+
+### 5.6 RF 圖像
 
 ```
 頻譜位置：        0       fc      2fc     3fc     4fc     5fc     ...
